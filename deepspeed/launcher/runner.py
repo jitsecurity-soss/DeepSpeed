@@ -434,7 +434,9 @@ def main(args=None):
             if args.ssh_port is not None:
                 ssh_check_cmd += f"-p {args.ssh_port} "
             ssh_check_cmd += f"{first_host} hostname"
-            subprocess.check_call(ssh_check_cmd, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL, shell=True)
+            import shlex
+
+subprocess.check_call(shlex.join(shlex.split(ssh_check_cmd, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL)), shell=True)
         except subprocess.CalledProcessError:
             raise RuntimeError(
                 f"Using hostfile at {args.hostfile} but host={first_host} was not reachable via ssh. If you are running with a single node please remove {args.hostfile} or setup passwordless ssh."
